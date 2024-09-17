@@ -1,0 +1,8 @@
+const lib = await WimuLibraries.loadLibrary("test");
+
+if (!lib) {
+    WimuConsole.info("Not a library");
+    return;
+}
+
+lib.hello();

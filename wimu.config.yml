@@ -1,0 +1,19 @@
+#
+#
+# > Rumble base configuration for yaml configurations
+#
+#
+
+rumbleImplementConfiguration: true
+
+#
+# | Other Implementations/Configurations
+#
+
+main: test
+users:
+  - Wimu
+  - allowit
+  - Wimu
+  - test
+hostname: allowit

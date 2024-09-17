@@ -1,0 +1,8 @@
+const [f] = args;
+
+if (!f) {
+    WimuConsole.error("No hash file was found!");
+    return;
+}
+
+WimuHash.runHashScript(fs.readFile(f));

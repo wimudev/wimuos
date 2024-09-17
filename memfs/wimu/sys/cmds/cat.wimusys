@@ -1,0 +1,8 @@
+const [f, ...o] = args;
+if (!f) return WimuConsole.error("No file was provided.")
+if (!fs.fileExists(f)) return WimuConsole.error("File was not found.");
+if (!o) o = [];
+
+const data = fs.readFile(f);
+const text = o.includes("/h") ? WimuText.codeHighlight(data) : data;
+console.log(text);

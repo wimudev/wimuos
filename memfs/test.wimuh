@@ -1,0 +1,3 @@
+# Wimu Hash Script 1.0.0
+
+cat test.wimu # Returns the data of the file

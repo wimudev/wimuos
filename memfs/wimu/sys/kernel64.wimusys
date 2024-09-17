@@ -1,0 +1,9 @@
+/*
+# 
+# | 64 Bit Kernel for wimu os
+#
+*/
+
+WimuConsole.clear();
+WimuConsole.figletLog("WimuOS")
+console.log("Welcome to WimuOS!");

@@ -1,0 +1,5 @@
+{
+    "baseExecutor": "wimu*",
+    "type": "bash&batch",
+    "configuration": "wimu.config.yml"
+}

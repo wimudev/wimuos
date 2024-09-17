@@ -1,0 +1,22 @@
+/*
+#
+# | Wimu Initialization File
+#
+*/
+
+// Configuration2
+WimuEnvironment.mainEnv.load();
+WimuConfiguration.mainConfig.load();
+
+// builder sys
+await loadSys("builder.wimusys");
+
+/*
+# 
+# | DO NOT REMOVE THIS LINE
+# 
+*/
+await loadSys("kernel64.wimusys");
+
+// Other
+;
