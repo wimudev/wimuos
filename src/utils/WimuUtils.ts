@@ -4,3 +4,6 @@ export function merge(base: any, add: any): any {
 }
 
 export type NonInitializedClass = new (...args: any[]) => any;
+export function satisfies<T>(defaultValue?: T): T {
+    return defaultValue ?? ({} as T);
+}

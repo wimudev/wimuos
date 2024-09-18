@@ -29,6 +29,8 @@ export class WimuLibraries {
             return null;
         }
 
+        c.initialize();
+
         return c;
     }
 

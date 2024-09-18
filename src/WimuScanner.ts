@@ -7,6 +7,7 @@ import { WimuFileContext } from "./context/file/WimuFileContext";
 import WimuConsole from "./console/WimuConsole";
 import { currentUser } from "./users/WimuUser";
 import { SetupConfiguration } from "./config/SetupConfiguration";
+import WimuLibman from "./commands/WimuLibman";
 
 export type Awaitable<T> = PromiseLike<T> | T;
 export type ICommandExecute = (rl: WimuScanner, ...args: string[]) => Awaitable<void>;
@@ -17,11 +18,40 @@ export interface ICommand {
 
 export class WimuScanner {
 
-    private it: Interface = createInterface(process.stdin as any, process.stdout);
+    private it: Interface = createInterface({
+        input: process.stdin,
+        output: process.stdout,
+        completer: (line: string) => this.completer(line),
+    });
+
     private commands: Map<string, ICommand> = new Map();
     private setupConfig: SetupConfiguration = SetupConfiguration.load("wimu.config.yml");
 
     start() {
+
+        const prompt = this.setupPrompt();
+
+        this.it.question(prompt, async (a) => {
+            
+            if (!a.length) {
+                this.start();
+                return;
+            }
+
+            const [cmd, ...args] = a.split(" ");
+
+            await this.execute(cmd, ...args);
+
+
+            console.log("")
+            this.start();
+
+        });
+
+    }
+
+    setupPrompt() {
+         
         if (!this.setupConfig.has("hostname")) throw new Error("Undefined hostname.");
         const name = color.blueBright(`${currentUser?.getName()}@${this.setupConfig.get("hostname")}`);
         let pwd = globalFs.getCWD();
@@ -33,19 +63,12 @@ export class WimuScanner {
         const bottom = `${bottomLine}${color.blueBright(`$`)} `
         const prompt = `${topLine}${color.greenBright(`(`)}${name}${color.greenBright(`)─[`)}${cwd}${color.greenBright(`]`)}\n${bottom}`;
 
-        this.it.question(prompt, async (a) => {
-            if (!a.length) {
-                this.start();
-                return;
-            }
-            const [cmd, ...args] = a.split(" ");
-            await this.execute(cmd, ...args);
-            console.log("")
-            this.start();
-        });
+        return prompt;
+
     }
-    
+
     async execute(cmd: string, ...args: string[]) {
+
         const result = await this.executeCommand(cmd, ...args);
         if (!result) {
             if (globalFs.fileExists(cmd + ".wimu")) {
@@ -58,6 +81,7 @@ export class WimuScanner {
                 WimuConsole.error("No command found with: " + cmd);
             }
         }
+
     }
 
     registerCommands() {
@@ -104,6 +128,7 @@ export class WimuScanner {
             globalFs.writeFile(dest, data);
             WimuConsole.success(`Written ${stat.size}KB to ${dest} using WimUpload`);
         });
+        this.registerJSONData(WimuLibman);
     }
 
     registerCommand(name: string, executor: ICommandExecute) {
@@ -111,6 +136,10 @@ export class WimuScanner {
             name,
             execute: executor
         });
+    }
+
+    registerJSONData(data: ICommand) {
+        this.commands.set(data.name, data);
     }
 
     async executeCommand(name: string, ...args: string[]) {
@@ -122,4 +151,9 @@ export class WimuScanner {
         return true;
     }
 
+    private completer(line: string): [string[], string] {
+        const completions = Array.from(this.commands.keys());
+        const hits = completions.filter((c) => c.startsWith(line));
+        return [hits.length ? hits : completions, line];
+    }
 }

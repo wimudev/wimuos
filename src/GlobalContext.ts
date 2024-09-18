@@ -8,6 +8,7 @@ import { highlight } from "cli-highlight";
 import WimuConsole from "./console/WimuConsole";
 import { loadSystemFile } from "./system/WimuSystem";
 import { WimuHash } from "./hash/WimuHash";
+import { useContext } from "./context/WimuUseContext";
 
 export const globalContext = {
     fs,
@@ -24,5 +25,6 @@ export const globalContext = {
         },
     },
     loadSys: loadSystemFile,
-    WimuHash: new WimuHash()
+    WimuHash: new WimuHash(),
+    useContext,
 };

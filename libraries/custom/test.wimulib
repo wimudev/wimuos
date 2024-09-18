@@ -1,0 +1,12 @@
+/**
+ * idk testing
+ */
+return class test extends WimuLibrary {
+    initialize() {
+        this.setName("test");
+        this.setVersion("1.0.0");
+        this.setDescription("idk testing");
+        WimuConsole.info("Initialized testlib");
+        return this;
+    }
+}

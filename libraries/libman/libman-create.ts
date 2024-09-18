@@ -6,7 +6,7 @@ import { writeFileSync } from "fs";
 const libfile = `/**
  * <description>
  */
-export class <name> extends WimuLibrary {
+return class <name> extends WimuLibrary {
     initialize(): this {
         this.setName("<name>");
         this.setVersion("<version>");

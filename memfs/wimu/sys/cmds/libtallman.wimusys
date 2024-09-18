@@ -1,0 +1,6 @@
+WimuConsole.info("Wimu LibTall Man!");
+WimuConsole.info("");
+WimuConsole.info("LibTall Man is a library management for WimuOS which allows loading, installing and removing libraries from the");
+WimuConsole.info("WimuOS system. LibTall Man provides cli utilities for libraries use.");
+WimuConsole.info("");
+WimuConsole.info("Thanks for using LibTall Man, made by Wimu Team.");

@@ -1,9 +1,0 @@
-class testlib extends WimuLibrary {
-
-    hello() {
-        WimuConsole.info("hi");
-    }
-
-}
-
-return testlib;
