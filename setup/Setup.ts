@@ -17,6 +17,12 @@ if (!config.exists()) config.save();
 const users: string[] = config.has("users") ? config.get("users") as string[] : [];
 
 async function ex() {
+    console.log("Welcome to WimuOS setup.");
+    console.log("The WimuOS setup allows you to create a user which could either be used as the main account of the system.");
+    console.log("");
+    console.log("Let's get started!");
+    console.log("");
+
     const usernamePrompt = await Inquirer.input({
         message: "What should be the username of the account?",
         default: "Wimu",

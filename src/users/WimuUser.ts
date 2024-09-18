@@ -37,3 +37,35 @@ export async function configureUser() {
     return currentUser;
 
 }
+
+export async function changeUser(username: string) {
+
+    if (!userExists(username)) throw new Error("Please run the setup before starting the operating system!");
+    currentUser = new WimuUser(username, `/Users/${username}`);
+    globalFs.setCWD(currentUser.getHomeDirectory());
+    return currentUser;
+
+}
+
+export function userExists(username: string) {
+
+    const wimuConfig = SetupConfiguration.load("wimu.config.yml");
+    if (!wimuConfig.exists()) throw new Error("Please run the setup before starting the operating system!");
+    const users: string[] = wimuConfig.get("users");
+    return users.includes(username);
+    
+}
+
+export async function createUser(username: string) {
+
+    const wimuConfig = SetupConfiguration.load("wimu.config.yml");
+    if (userExists(username)) throw new Error("User exists already!");
+    const usr = new WimuUser(username, `/Users/${username}`);
+    const users: string[] = wimuConfig.get("users") ?? [];
+    users.push(username);
+    wimuConfig.set("users", users);
+    wimuConfig.save();
+    await changeUser(username);
+    return usr;
+
+}

@@ -10,10 +10,7 @@ rumbleImplementConfiguration: true
 # | Other Implementations/Configurations
 #
 
-main: test
+main: WimuMax
+hostname: wimu
 users:
-  - Wimu
-  - allowit
-  - Wimu
-  - test
-hostname: allowit
+  - WimuMax

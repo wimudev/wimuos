@@ -1,5 +1,6 @@
-import { createFsFromVolume, IFs, fs as memfs, Volume } from 'memfs';
+import { createFsFromVolume, IFs, Volume } from 'memfs';
 import * as realFs from 'fs';
+import * as realFsPromises from "fs/promises";
 import * as path from 'path/posix';
 import { currentUser } from './users/WimuUser';
 
@@ -128,25 +129,25 @@ class WimuFS {
     }
 
     async loadFilesFromFolder(realFolderPath: string): Promise<void> {
-        const loadFilesRecursively = (currentPath: string, memfsPath: string) => {
-            const files = realFs.readdirSync(currentPath);
+        const loadFilesRecursively = async (currentPath: string, memfsPath: string) => {
+            const files = await realFsPromises.readdir(currentPath);
 
-            files.forEach((file) => {
+            files.forEach(async (file) => {
                 const realFilePath = path.join(currentPath, file);
                 const memfsFilePath = this.resolvePath(path.join(memfsPath, file));
 
-                if (realFs.statSync(realFilePath).isDirectory()) {
-                    this.createDirectory(memfsFilePath);
+                if ((await realFsPromises.stat(realFilePath)).isDirectory()) {
+                    await this.createDirectory(memfsFilePath);
                     loadFilesRecursively(realFilePath, memfsFilePath);
                 } else {
-                    const fileContent = realFs.readFileSync(realFilePath, { encoding: 'utf-8' });
-                    this.writeFile(memfsFilePath, fileContent);
+                    const fileContent = await realFsPromises.readFile(realFilePath, { encoding: 'utf-8' });
+                    await this.writeFile(memfsFilePath, fileContent);
                 }
             });
         };
 
         try {
-            loadFilesRecursively(realFolderPath, '/');
+            await loadFilesRecursively(realFolderPath, '/');
             console.log('Files loaded successfully.');
         } catch (err) {
             console.error(`Error loading files from folder ${realFolderPath}: ${(err as Error).message}`);

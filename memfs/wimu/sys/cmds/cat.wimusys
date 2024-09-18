@@ -4,5 +4,6 @@ if (!fs.fileExists(f)) return WimuConsole.error("File was not found.");
 if (!o) o = [];
 
 const data = fs.readFile(f);
-const text = o.includes("/h") ? WimuText.codeHighlight(data) : data;
+const language = o.includes("/l") ? o[o.indexOf("/l") + 1] : undefined;
+const text = o.includes("/h") ? WimuText.codeHighlight(data, language) : data;
 console.log(text);

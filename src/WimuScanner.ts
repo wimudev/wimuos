@@ -8,6 +8,7 @@ import WimuConsole from "./console/WimuConsole";
 import { currentUser } from "./users/WimuUser";
 import { SetupConfiguration } from "./config/SetupConfiguration";
 import WimuLibman from "./commands/WimuLibman";
+import WimuUserCmd from "./commands/WimuUserCmd";
 
 export type Awaitable<T> = PromiseLike<T> | T;
 export type ICommandExecute = (rl: WimuScanner, ...args: string[]) => Awaitable<void>;
@@ -129,6 +130,7 @@ export class WimuScanner {
             WimuConsole.success(`Written ${stat.size}KB to ${dest} using WimUpload`);
         });
         this.registerJSONData(WimuLibman);
+        this.registerJSONData(WimuUserCmd);
     }
 
     registerCommand(name: string, executor: ICommandExecute) {

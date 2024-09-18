@@ -20,8 +20,13 @@ export const globalContext = {
     WimuEnvironment,
     WimuConsole: WimuConsole,
     WimuText: {
-        codeHighlight: (code: string,) => {
-            return highlight(code, { ignoreIllegals: false })
+        codeHighlight: (code: string, language?: string) => {
+            try {
+                return highlight(code, { ignoreIllegals: false, language: language })
+            } catch (err) {
+                WimuConsole.error("Unknown language has been given!");
+                return "";
+            }
         },
     },
     loadSys: loadSystemFile,
